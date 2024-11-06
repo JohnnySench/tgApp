@@ -1,8 +1,5 @@
 <template>
 	<nuxt-layout>
-		<div :class="colorScheme">
-			{{ colorScheme }} - color
-		</div>
 		<nuxt-page />
 	</nuxt-layout>
 </template>
@@ -11,4 +8,6 @@
 const { init } = useTgWebAppStore();
 const { colorScheme } = storeToRefs(useTgWebThemeStore());
 await init();
+
+provide('colorScheme', colorScheme);
 </script>
