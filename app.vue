@@ -1,11 +1,14 @@
 <template>
- <nuxt-layout>
-   <nuxt-page />
- </nuxt-layout>
-
+	<nuxt-layout>
+		<div :class="colorScheme">
+			{{ colorScheme }} - color
+		</div>
+		<nuxt-page />
+	</nuxt-layout>
 </template>
-<script setup lang="ts">
 
-const {init} = useTgWebAppStore()
-init()
+<script setup lang="ts">
+const { init } = useTgWebAppStore();
+const { colorScheme } = storeToRefs(useTgWebThemeStore());
+await init();
 </script>
