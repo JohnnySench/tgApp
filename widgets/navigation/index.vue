@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { useCartStore } from '~/stores/cart';
+
 const currentId = shallowRef(1);
+const { cart } = storeToRefs(useCartStore());
 
 const links = computed(() => {
 	return [
@@ -26,6 +29,17 @@ const links = computed(() => {
 			id: 2,
 		},
 		{
+			text: 'Заказы',
+			iconName: 'fluent:re-order-dots-vertical-16-filled',
+			action: async (selectId: number) => {
+				currentId.value = selectId;
+				await navigateTo({
+					name: 'order',
+				});
+			},
+			id: 3,
+		},
+		{
 			text: 'Профиль',
 			iconName: 'pajamas:profile',
 			action: async (selectId: number) => {
@@ -34,7 +48,7 @@ const links = computed(() => {
 					name: 'profile',
 				});
 			},
-			id: 3,
+			id: 4,
 		},
 		{
 			text: 'Корзина',
@@ -45,8 +59,8 @@ const links = computed(() => {
 					name: 'cart',
 				});
 			},
-			id: 4,
-			class: true,
+			id: 5,
+			cartIsNotEmpty: cart.value.length,
 		},
 	];
 });
@@ -54,9 +68,9 @@ const links = computed(() => {
 
 <template>
 	<div class="header">
-		<div class="grid grid-cols-4 items-center">
+		<div class="grid grid-cols-5 items-center">
 			<div
-				v-for="({ text, iconName, action, id, class: className }, index) in links"
+				v-for="({ text, iconName, action, id, cartIsNotEmpty }, index) in links"
 				:key="index"
 				class="relative p-1 flex flex-col justify-center items-center gap-1"
 				@click="action(id)"
@@ -66,11 +80,11 @@ const links = computed(() => {
 					:style="{ color: id === currentId ? '#d946ef' : '#9ca3af' }"
 				/>
 				<div
-					v-if="className"
-					class="flex items-center justify-center text-center overflow-hidden size-[15px]
+					v-if="cartIsNotEmpty"
+					class="flex items-center justify-center text-center overflow-hidden size-[14px]
 					rounded-full bg-red-500 absolute right-1/3 top-0"
 				>
-					<span>a</span>
+					<span class="text-[10px] font-medium text-white">{{ cartIsNotEmpty }}</span>
 				</div>
 				<span
 					class="text-xs text-gray-400"
@@ -82,7 +96,4 @@ const links = computed(() => {
 </template>
 
 <style scoped lang="postcss">
-.count-cart {
-  @apply text-black
-}
 </style>

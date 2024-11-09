@@ -46,6 +46,7 @@ export const useTgWebAppStore = defineStore('tgWebAppStore', () => {
 	};
 
 	return {
+		webAppData,
 		contactData,
 		init,
 	};
