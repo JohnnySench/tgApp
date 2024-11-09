@@ -1,10 +1,23 @@
 <script setup lang="ts">
+import { useCart } from '~/stores/cart';
+
 const pizza = ref(null);
 onMounted(async () => {
 	pizza.value = await $fetch('https://dummyjson.com/recipes');
 });
 
 const colorScheme = inject('colorScheme');
+
+const { addToCart, removeFromCart } = useCart();
+
+const handleAddToCart = (item) => {
+	console.log(1);
+	addToCart(item);
+};
+
+const handleRemoveFromCart = (item) => {
+	removeFromCart(item);
+};
 </script>
 
 <template>
@@ -37,6 +50,12 @@ const colorScheme = inject('colorScheme');
 							Рейтинг: {{ item?.rating }}
 						</p>
 						<p>Цена: {{ item?.userId }}</p>
+						<p @click="handleAddToCart(item)">
+							Добавить в корзину
+						</p>
+						<p @click="handleRemoveFromCart(item)">
+							Удалить из корзины
+						</p>
 					</div>
 				</div>
 			</div>

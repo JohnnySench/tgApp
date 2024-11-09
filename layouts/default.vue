@@ -4,12 +4,15 @@
 
 <template>
 	<div class="container overflow-hidden">
-		<div class="h-[90vh] border border-gray-200 overflow-auto">
+		<header>
+			<widget-header />
+		</header>
+		<div class="h-[85vh] overflow-auto">
 			<slot />
 		</div>
 
 		<nav>
-			<widget-header />
+			<widget-navigation />
 		</nav>
 	</div>
 </template>

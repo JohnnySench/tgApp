@@ -1,8 +1,10 @@
 import { useWebApp, useWebAppCloudStorage, useWebAppPopup, useWebAppRequests } from 'vue-tg';
+import type { TContactData } from '~/types';
 
 export const useTgWebAppStore = defineStore('tgWebAppStore', () => {
 	const webAppData = ref<null | Record<string, any>>(null);
 	const dataUnsafe = ref<string | null>(null);
+	const contactData = ref<Record<TContactData, number | string> | null>(null);
 
 	const init = async () => {
 		webAppData.value = useWebApp();
@@ -25,11 +27,13 @@ export const useTgWebAppStore = defineStore('tgWebAppStore', () => {
 
 	const getContactData = async () => {
 		const data = await useWebAppCloudStorage().getStorageItem('contactData');
+		console.log(data, ' ok');
 		if (typeof data === 'string' && data === '') {
 			useWebAppRequests().requestContact((ok, response) => {
 				console.log(ok, response?.responseUnsafe.contact);
 				if (ok) {
-					useWebAppCloudStorage().setStorageItem('contactData', JSON.stringify(response?.responseUnsafe.contact));
+					useWebAppCloudStorage()
+						.setStorageItem('contactData', JSON.stringify(response?.responseUnsafe.contact));
 				}
 				else {
 					useWebAppPopup().showAlert('Контакт не получен');
@@ -37,11 +41,12 @@ export const useTgWebAppStore = defineStore('tgWebAppStore', () => {
 			});
 		}
 		else {
-			useWebApp().contactData = JSON.parse(data as string);
+			contactData.value = JSON.parse(data as string);
 		}
 	};
 
 	return {
+		contactData,
 		init,
 	};
 });
